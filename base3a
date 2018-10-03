@@ -1,0 +1,24 @@
+#include "/Users/thaole/stdc++.h"
+using namespace std;
+long long n;
+string test(long long number,long long i){
+    string t = "";
+    string ot = "";
+    long long a = 0;
+    while(number>0){
+        a = number%i;
+        if(a==2){
+            ot = "1a"+ot;
+        }
+        else
+            ot = to_string(a)+ot;
+        t = to_string(a)+t;
+        number = number/i;
+    }
+    return t+"\n"+ot;
+}
+int main(){
+    cin>>n;
+    cout<<test(n,3);
+    return 0;
+}
