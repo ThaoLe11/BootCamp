@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+#define loop(n) for(int i = 0; i < n; ++i)
+using namespace std;
+int n,a,b;
+int main(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>a>>b;
+        if(a==1||b==1)cout<<0<<endl;
+        else
+            cout<<min(a,b)*2-2<<endl;
+    }
+    return 0;
+}
