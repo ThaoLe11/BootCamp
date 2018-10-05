@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+#define loopa(n) for(int i = 0; i < n; ++i)
+#define loop(n) for(int i = 0; i <= n; ++i)
+using namespace std;
+int n;
+int64_t a[6] = {0};
+int main(){
+    cin>>n;
+    loopa(n){
+        for(int j=0;j<6;j++){
+            cin>>a[j];
+        }
+        sort(a, a+6);
+        
+        if(a[0]*a[5]-a[1]*a[4]<=0){
+            cout<<a[0]<<" "<<a[4]<<" "<<a[1]<<" "<<a[5]<<"\n";
+        }
+        else{
+            cout<<a[1]<<" "<<a[5]<<" "<<a[0]<<" "<<a[4]<<"\n";
+            
+        }
+    }
+    return 0;
+}
