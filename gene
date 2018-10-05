@@ -1,0 +1,87 @@
+#include "/Users/thaole/stdc++.h"
+
+#define loop(n) for(int i = 0; i <= n; ++i)
+using namespace std;
+typedef pair<int,int> pii;
+int n,q,x,y,k,po;
+
+vector<int> ans(n,0);
+string s;
+vector<int> v;
+vector<pii> tr;
+vector<int> st;
+void upd_tr(int x, int val){
+    int p = po+x-1;
+    tr[p].first = val;
+    tr[p].second = tr[p].first;
+    while(p>1){
+        p/=2;
+        tr[p].first = tr[2*p].first+tr[2*p+1].first;
+        tr[p].second = min(tr[2*p].second+tr[2*p+1].first,tr[2*p+1].second);
+    }
+}
+int get_min(int x, int y){
+    pii tx, ty, tm;
+    x+= po - 1;
+    y+= po - 1;
+    tx = tr[x];
+    ty = tr[y];
+    if(x == y) return min(0, tx.second);
+    while(y - x > 1){
+        tm = tx;
+        if((x&1) == 0){
+            tx.first += tr[x + 1].first;
+            tx.second = min(tm.second + tr[x + 1].first, tr[x + 1].second);
+        }
+        tm = ty;
+        if(y&1){
+            ty.first += tr[y - 1].first;
+            ty.second = min(tr[y - 1].second + tm.first, tm.second);
+        }
+        x/=2;
+        y/=2;
+    }
+    return min(0, min(tx.second + ty.first, ty.second));
+}
+int main(){
+    cin>>n;
+    cin>>s;
+    for (int i=20; i>=0; --i) {
+        if((n>>i)&1){
+            k=i+1;
+            break;
+        }
+    }
+    po=1<<k;
+    // po location of first leaf
+    v.resize(n+1);
+    loop(n){
+        v[i] = (s[i-1]=='C')?1:-1;
+    }
+    tr.resize(4*n+5,{0,n+1});
+    cin>>q;
+    vector<vector<pii>> qr(n+1);
+    ans.resize(q+1);
+    for(int i=1;i<=q;i++){
+        cin>>x>>y;
+        qr[x].push_back({y,i});
+    }
+    for(int i = n; i; --i){
+        if(v[i] == -1){
+            st.push_back(i);
+            upd_tr(i, 0);
+        }else{
+            upd_tr(i, 1);
+            if(!st.empty()){
+                upd_tr(st.back(), -1); st.pop_back();
+            }
+        }
+        for(auto j: qr[i]){
+            int l = i, r = j.first;
+            ans[j.second] = upper_bound(st.rbegin(), st.rend(), r) - st.rbegin() - get_min(l, r);
+        }
+    }
+    for(int i=1;i<=q;i++){
+        cout<<ans[i]<<"\n";
+    }
+}
