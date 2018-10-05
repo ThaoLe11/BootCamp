@@ -1,0 +1,52 @@
+#include "/Users/thaole/stdc++.h"
+
+#define loop(n) for(int i = 0; i < n; ++i)
+using namespace std;
+typedef tuple<int,int,int> tii;
+int n,x,y;
+vector<int> ans(n,0);
+priority_queue<int> mx;
+//1 if head,2 if end
+int main(){
+    cin>>n;
+    vector<tii> s(2*n);
+    for(int i=0;i<n;++i){
+        cin>>x>>y;
+        s[2*i]=make_tuple(x,0,i);
+        s[2*i+1]=make_tuple(y,1,i);
+    }
+    sort(s.begin(), s.end());
+    vector<int> ans(n,0);
+    int a,t,tx,id,q=-1;
+    for(auto &p:s){
+        tie(a,t,id)=p;
+        if(t==0){
+            if(id>q && q>=0){
+                ans[q]=2;
+                mx.push(q);
+                q=id;
+                continue;
+            }
+            if(id>q && q<0){
+                tx=-1;
+                while(!mx.empty() && ans[mx.top()]==1)mx.pop();
+                if(!mx.empty())tx=mx.top();
+                if(id>tx){
+                    q=id;
+                    continue;
+                }
+            }
+            mx.push(id);
+            ans[id]=2;
+            continue;
+            
+        }
+        else{
+            if(id==q){q=-1;continue;}else ans[id]=1;
+        }
+    }
+    x=n;
+    for(int i:ans)x-=i;
+    cout<<x<<"\n";
+    loop(n)if(ans[i]==0)cout<<i+1<<" ";
+}
